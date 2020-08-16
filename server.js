@@ -179,7 +179,20 @@ function start(){
                                 name: "employee_role",
                                 choices: array
                             }                            
-                        ])                   
+                        ]).then((response) => {
+                            connection.query("INSERT INTO employee SET ?",
+                            {
+                                first_name: response.employee_firstName,
+                                last_name: response.employee_lastName,
+                                role_id: 1,
+                                manager_id: 1                            
+                            },
+                            
+                            function(err){
+                                if (err) throw err;
+                                console.log("Inserted 1 row!");
+                            })
+                        })                              
                     })
 
                 }
