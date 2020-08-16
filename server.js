@@ -118,6 +118,7 @@ function start(){
                 else if(response.add === "Role"){ 
                     connection.query("SELECT * FROM department", function(err, result){
                         if(err) throw err;
+                        console.log(result);
 
                         inquirer.prompt([
                             {
@@ -149,12 +150,38 @@ function start(){
                                 if (err) throw err;
                                 console.log("Inserted 1 row!");
                             })
-                        })         
-                        
-                        
-                        
+                        })                         
                     })
                           
+                }
+                else if(response.add === "Employee"){
+                    connection.query("SELECT title FROM role", function(err, result){
+                        if(err) throw err;
+                        
+                        var array = [];
+
+                        for (var i = 0; i < result.length; i++){
+                            array.push(result[i].title)
+                        }
+                                               
+                        inquirer.prompt([
+                            {
+                                type: "input",
+                                message: "Enter employee first name",
+                                name: "employee_firstName"
+                            },{
+                                type: "input",
+                                message: "Enter employee last name",
+                                name: "employee_lastName"
+                            },{
+                                type: "list",
+                                message: "Scroll UP or DOWN, press ENTER to select employee role",
+                                name: "employee_role",
+                                choices: array
+                            }                            
+                        ])                   
+                    })
+
                 }
             })
         }
