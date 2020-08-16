@@ -136,7 +136,20 @@ function start(){
                                 name: "role_department",
                                 choices: result
                             }
-                        ])              
+                        ]).then((response) => {
+                            connection.query("INSERT INTO role SET ?",
+                            {
+                                title: response.role_title,
+                                salary: response.role_number,
+                                department_id: 1
+                            
+                            },
+                            
+                            function(err){
+                                if (err) throw err;
+                                console.log("Inserted 1 row!");
+                            })
+                        })         
                         
                         
                         
