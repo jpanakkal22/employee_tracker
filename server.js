@@ -30,6 +30,27 @@ console.log("connected as id " + connection.threadId);
 start();
 });
 
+// connection.query("SELECT * FROM department", function(err, result){
+//     if(err) throw err;})
+//     console.log(result);
+//     // var newArray = result.map((department) => department.department_id);
+//     // console.log(newArray);
+   
+
+//     inquirer.prompt(
+//         {
+//             type: "list",
+//             message: "Choose a department",
+//             name: "role_department",
+//             choices: result
+//         }
+//     ).then((response) => {
+//         console.log(response);  
+            
+        
+//     });
+// });
+
 // Begin Inquirer
 function start(){
     inquirer.prompt(questions).then((response) => {
@@ -69,7 +90,60 @@ function start(){
         }
         // Prompt for ADD
         else if(response.initial === "ADD"){
-            inquirer.prompt();
+            inquirer.prompt(
+                {
+                    type: "list",
+                    message: "Scroll UP or DOWN, press ENTER to select",
+                    name: "add",
+                    choices: ["Department", "Role", "Employee"]
+                }
+            ).then((response) => {
+                if(response.add === "Department"){
+                    inquirer.prompt(
+                        {
+                            type: "input",
+                            message: "Enter department name",
+                            name: "department_name"
+                        }
+                    ).then((response) => {
+                        connection.query("INSERT INTO department SET ?",
+                        {name: response.department_name},
+                        
+                        function(err){
+                            if (err) throw err;
+                            console.log("Inserted 1 row!");
+                        })
+                    })
+                }
+                else if(response.add === "Role"){ 
+                    connection.query("SELECT * FROM department", function(err, result){
+                        if(err) throw err;
+
+                        inquirer.prompt([
+                            {
+                                type: "input",
+                                message: "Enter title",
+                                name: "role_title"
+                            },
+                            {
+                                type: "number",
+                                message: "Enter salary from 0 to 999999.00",
+                                name: "role_number"
+                            },
+                            {
+                                type: "list",
+                                message: "Scroll UP or DOWN, press ENTER to select",
+                                name: "role_department",
+                                choices: result
+                            }
+                        ])              
+                        
+                        
+                        
+                    })
+                          
+                }
+            })
         }
         // Prompt for UPDATE ROLE
         else {
