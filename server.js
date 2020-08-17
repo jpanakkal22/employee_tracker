@@ -26,6 +26,8 @@ function start(){
     sql += "FROM employee JOIN role ON employee.role_id=role.role_id Join department ON role.department_id=department.department_id";
     connection.query(sql, function(err, result){
         if (err) throw err;
+
+        // Console.table
         console.table(result);
 
         inquirer.prompt(
@@ -35,42 +37,8 @@ function start(){
                 name: "initial",
                 choices: ["ADD", "UPDATE ROLE"]
             }   
-        ).then((response) => {
-            
+        ).then((response) => {           
     
-            // Prompt to VIEW
-            // if(response.initial === "VIEW"){
-            //     inquirer.prompt(
-            //         {
-            //             type: "list",
-            //             message: "Scroll UP or DOWN, press ENTER to view",
-            //             name: "view",
-            //             choices: ["Department", "Role", "Employee"]
-            //         }
-            //     ).then((response) => {
-            //         if(response.view === "Department"){
-            //             connection.query("SELECT * FROM  department", function (err, res){
-            //                 if (err) throw err;
-                            
-            //                 console.table(res);
-            //             });
-            //         }
-            //         else if(response.view === "Role"){
-            //             connection.query("SELECT * FROM  role", function (err, res){
-            //                 if (err) throw err;
-                            
-            //                 console.table(res);
-            //             });
-            //         }
-            //         else {
-            //             connection.query("SELECT * FROM  employee", function (err, res){
-            //                 if (err) throw err;
-                            
-            //                 console.table(res);
-            //             });
-            //         }  
-            //     })
-            // }
             // Prompt for ADD
             if(response.initial === "ADD"){
                 inquirer.prompt(
@@ -95,6 +63,7 @@ function start(){
                             function(err){
                                 if (err) throw err;
                                 console.log("Inserted 1 row!");
+                                start();
                             })
                         })
                     }
@@ -136,6 +105,7 @@ function start(){
                                 function(err){
                                     if (err) throw err;
                                     console.log("Inserted 1 row!");
+                                    start();
                                 })
                             })                         
                         })
@@ -148,8 +118,7 @@ function start(){
                             result = result.map((rol) => {
                                 return {name: rol.title, value: rol.role_id}
                             })
-                             console.log(result);
-                                                                         
+                                                                                                      
                             inquirer.prompt([
                                 {
                                     type: "input",
@@ -177,6 +146,7 @@ function start(){
                                 function(err){
                                     if (err) throw err;
                                     console.log("Inserted 1 row!");
+                                    start();
                                 })
                             })                              
                         })
@@ -186,34 +156,34 @@ function start(){
             }
             // Prompt for UPDATE ROLE
             else {
-                connection.query("SELECT * FROM employee", function(err, result){
+                connection.query("SELECT employee.employee_id, employee.first_name, employee.last_name, employee.role_id, role.title FROM employee JOIN role ON employee.role_id=role.role_id", function(err, result){
                     if(err) throw err;
-                    console.log(result)
                     
-                    var array = [];
-    
-                    for (var i = 0; i < result.length; i++){
-                        array.push(result[i].title)
-                    }
+                    var names = result.map((name) => {
+                        return {name: `${name.first_name + " " + name.last_name}`, value: name.employee_id}
+                    })
+
+                    var roles = result.map((rol) => {
+                        return {name: rol.title, value: rol.role_id}
+                    })
+                   console.log(result);
+                   console.log(names);
                     
                     inquirer.prompt([
                         {
                             type: "list",
-                            message: "Update Employee Role -> Scroll UP or DOWN, press ENTER to select employee",
+                            message: "Scroll UP or DOWN, press ENTER to select employee",
                             name: "update_employee",
-                            choices: result
+                            choices: names
+                        },{
+                            type: "list",
+                            message: "Scroll UP or DOWN, press ENTER to select NEW role",
+                            name: "update_role",
+                            choices: roles
                         }
-                    ]);       
-            
-                 })
-                
+                    ]);             
+                })                
             }            
-        })   
-
-
-
-    })
-
-    
-        
+        })
+    })        
 }
