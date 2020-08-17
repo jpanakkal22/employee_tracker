@@ -166,8 +166,8 @@ function start(){
                     var roles = result.map((rol) => {
                         return {name: rol.title, value: rol.role_id}
                     })
-                   console.log(result);
-                   console.log(names);
+                    console.log(names);
+                    console.log(roles);
                     
                     inquirer.prompt([
                         {
@@ -181,7 +181,22 @@ function start(){
                             name: "update_role",
                             choices: roles
                         }
-                    ]);             
+                    ]).then((response) => {
+                        connection.query("UPDATE employee SET ? WHERE ?",
+                        [
+                            {
+                                role_id: response.update_role
+                            },
+                            {
+                                employee_id: response.update_employee
+                            }
+                        ],
+                        function(error) {
+                            if(error) throw error;
+                            console.log("Updated role!");
+                            start();
+                        });
+                    })             
                 })                
             }            
         })
