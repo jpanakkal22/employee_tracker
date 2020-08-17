@@ -28,12 +28,18 @@ CREATE TABLE employee (
     primary key(employee_id)
 );
 
-INSERT INTO department (name) VALUES ("department_1");
-INSERT INTO department (name) VALUES ("department_2");
+INSERT INTO department (name) VALUES ("Chemical");
+INSERT INTO department (name) VALUES ("Extruding");
+INSERT INTO department (name) VALUES ("Packaging");
+INSERT INTO department (name) VALUES ("QA");
 
-INSERT INTO role (title, salary, department_id) VALUES ("Manager", 20000, 1);
-INSERT INTO role (title, salary, department_id) VALUES ("Engineer", 10000, 2);
+INSERT INTO role (title, salary, department_id) VALUES ("Supervisor", 100000, 1);
+INSERT INTO role (title, salary, department_id) VALUES ("Manager", 90000, 2);
+INSERT INTO role (title, salary, department_id) VALUES ("Engineer", 80000, 1);
+INSERT INTO role (title, salary, department_id) VALUES ("Operator", 50000, 2);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Josh", "Panakkal", 1, 1);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Tim", "Kellogg", 2, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Tom", "Hanks", 1, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("John", "Smith", 2, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Jason", "Jones", 3, 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("Lebron", "James", 4, 1);
 

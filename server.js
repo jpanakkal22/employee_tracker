@@ -20,6 +20,8 @@ console.log("connected as id " + connection.threadId);
 start();
 });
 
+
+
 // Begin Inquirer
 function start(){
     var sql = "SELECT employee.employee_id, employee.first_name, employee.last_name, role.title, department.name, role.salary ";
@@ -35,12 +37,48 @@ function start(){
                 type: "list",
                 message: "Scroll UP or DOWN, press ENTER to select",
                 name: "initial",
-                choices: ["ADD", "UPDATE ROLE"]
+                choices: ["VIEW", "ADD", "UPDATE ROLE"]
             }   
         ).then((response) => {           
     
+            // Prompt to VIEW
+            if(response.initial === "VIEW"){
+                inquirer.prompt(
+                    {
+                        type: "list",
+                        message: "Scroll UP or DOWN, press ENTER to view",
+                        name: "view",
+                        choices: ["Department", "Role", "Employee"]
+                    }
+                ).then((response) => {
+                    if(response.view === "Department"){
+                        connection.query("SELECT * FROM  department", function (err, res){
+                            if (err) throw err;
+
+                            console.table(res);
+                            start();
+                        });
+                    }
+                    else if(response.view === "Role"){
+                        connection.query("SELECT * FROM  role", function (err, res){
+                            if (err) throw err;
+
+                            console.table(res);
+                            start();
+                        });
+                    }
+                    else {
+                        connection.query("SELECT * FROM  employee", function (err, res){
+                            if (err) throw err;
+
+                            console.table(res);
+                            start();
+                        });
+                    }  
+                })
+            }
             // Prompt for ADD
-            if(response.initial === "ADD"){
+            else if(response.initial === "ADD"){
                 inquirer.prompt(
                     {
                         type: "list",
